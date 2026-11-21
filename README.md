@@ -1,379 +1,379 @@
-# MagicBuyer-UT — sniper pour le web app EA FC 27
+# MagicBuyer-UT — sniper para la web app de EA FC 27
 
-Script Tampermonkey qui ajoute un sniper / autobuyer au web app **EA SPORTS FC 27 Ultimate Team** :
-recherche en boucle sur le marché des transferts, achat immédiat des cartes sous ton prix max (fixe ou
-au % du prix FUTBIN suivi en direct), mise en vente automatique au prix FUTBIN, prix FUTBIN sur chaque
-carte, import des solutions FUTBIN dans les DCE avec achat des joueurs manquants, pauses et arrêts configurables.
-Il ajoute aussi des outils (raccourcis clavier, compteur de requêtes EA, bonnes affaires, prix min EA, club, packs)
-et un planificateur pour la **Galerie** FC 27 (collections, paliers, bonus, achat des joueurs manquants).
+Script de Tampermonkey que añade un sniper / autobuyer a la web app de **EA SPORTS FC 27 Ultimate Team**:
+búsqueda en bucle en el mercado de transferibles, compra inmediata de cartas por debajo de tu precio máximo (fijo o
+a un % del precio de FUTBIN seguido en directo), puesta en venta automática al precio de FUTBIN, precio de FUTBIN en cada
+carta, importación de soluciones de FUTBIN en los DCP con compra de los jugadores faltantes, pausas y detenciones configurables.
+También añade herramientas (atajos de teclado, contador de peticiones a EA, gangas, precio mín. de EA, club, sobres)
+y un planificador para la **Galería** de FC 27 (colecciones, niveles, bonificaciones, compra de los jugadores faltantes).
 
-> ⚠️ **À lire avant d'utiliser.** L'automatisation du web app est contraire aux conditions d'utilisation d'EA.
-> EA peut restreindre l'accès au marché des transferts (soft ban), demander des captchas, voire bannir le compte.
-> Utilise ce script à tes risques ; les auteurs ne sont pas responsables d'une sanction sur ton compte.
+> ⚠️ **Leer antes de usar.** La automatización de la web app es contraria a los términos de servicio de EA.
+> EA puede restringir el acceso al mercado de transferibles (soft ban), pedir captchas o incluso suspender la cuenta.
+> Usa este script bajo tu propia responsabilidad; los autores no se hacen responsables de ninguna sanción en tu cuenta.
 
-## Installation
+## Instalación
 
-1. Installe [Tampermonkey](https://www.tampermonkey.net/) sur Chrome, Edge ou Brave.
-   Sur Chrome récent, active **« Autoriser les scripts utilisateur »** dans les détails de l'extension Tampermonkey.
-2. Ouvre `fut-auto-buyer.user.js` depuis la [dernière release](https://github.com/AMINE1921/MagicBuyer-UT/releases/latest) et clique sur **Installer**.
-3. Ouvre le [web app FC 27](https://www.ea.com/ea-sports-fc/ultimate-team/web-app/) et connecte-toi.
+1. Instala [Tampermonkey](https://www.tampermonkey.net/) en Chrome, Edge o Brave.
+   En versiones recientes de Chrome, activa **«Permitir scripts de usuario»** en los detalles de la extensión Tampermonkey.
+2. Abre `fut-auto-buyer.user.js` desde la [última release](https://github.com/AMINE1921/MagicBuyer-UT/releases/latest) y haz clic en **Instalar**.
+3. Abre la [web app de FC 27](https://www.ea.com/ea-sports-fc/ultimate-team/web-app/) e inicia sesión.
 
-Le marché des transferts doit être débloqué sur ton compte.
+El mercado de transferibles debe estar desbloqueado en tu cuenta.
 
-## Démarrage rapide
+## Inicio rápido
 
-1. Clique sur l'onglet **MagicBuyer** (barre de navigation EA) ou sur la pastille **MB** en bas à droite.
-2. Onglet **Cible** : tape le nom du joueur et choisis-le dans la liste.
-3. Renseigne le **Prix d'achat max** (achat immédiat) et, si tu veux revendre, le **Prix de revente**
-   (le panneau affiche le net après la taxe EA de 5 % et le bénéfice par carte).
-4. Clique sur **Tester la recherche (sans acheter)** pour voir ce que le marché renvoie (en vert : ce que le bot achèterait).
-5. Clique sur **▶ Démarrer**. Tu peux fermer le panneau : la pastille affiche l'état, les recherches et les achats.
+1. Haz clic en la pestaña **MagicBuyer** (barra de navegación de EA) o en el botón flotante **MB** abajo a la derecha.
+2. Pestaña **Objetivo**: escribe el nombre del jugador y selecciónalo de la lista.
+3. Introduce el **Precio máximo de compra** (compra ya) y, si quieres revender, el **Precio de reventa**
+   (el panel muestra el neto tras el impuesto del 5 % de EA y el beneficio por carta).
+4. Haz clic en **Probar búsqueda (sin comprar)** para ver qué devuelve el mercado (en verde: lo que el bot compraría).
+5. Haz clic en **▶ Iniciar**. Puedes cerrar el panel: el botón flotante muestra el estado, las búsquedas y las compras.
 
-Autre méthode : règle ta recherche dans **Transferts → Marché des transferts** d'EA (rareté, poste, style de jeu…)
-puis clique sur **⚡ Sniper cette recherche** : un filtre est créé avec exactement ces critères.
+Otro método: configura tu búsqueda en **Traspasos → Mercado de transferibles** de EA (rareza, posición, estilo de juego…)
+y haz clic en **⚡ Snipear esta búsqueda**: se creará un filtro con exactamente esos criterios.
 
-## Prix FUTBIN
+## Precios de FUTBIN
 
-Toutes les fonctions de prix utilisent **FUTBIN** (pages lues comme dans ton navigateur, plateforme console ou PC
-selon ton compte). Onglet **FUTBIN** : bouton **Tester FUTBIN** pour vérifier l'accès.
+Todas las funciones de precios utilizan **FUTBIN** (páginas leídas como en tu navegador, plataforma de consola o PC
+según tu cuenta). Pestaña **FUTBIN**: botón **Probar FUTBIN** para verificar el acceso.
 
-- **Achat au % du prix FUTBIN** (onglet Cible → Prix d'achat → Mode) : par exemple 90 % ; le prix d'achat max
-  est recalculé à chaque mise à jour du prix. Un prix fixe peut servir de plafond absolu. Fonctionne pour une version
-  précise, pour toutes les versions d'un joueur, ou pour tous les joueurs d'un filtre (liste FUTBIN) : chaque carte
-  a son propre prix max.
-  Sans prix FUTBIN récent (moins de 5 min), le filtre attend : jamais d'achat sur un prix périmé.
-- **Revente au % du prix FUTBIN** (onglet Vente, ou par filtre) : le prix de la version achetée est relu juste
-  après l'achat. Sans prix FUTBIN, la carte va dans la liste des transferts sans être listée.
-- **Relist au prix FUTBIN** et bouton **Lister au prix FUTBIN** (onglet Transferts) pour les cartes disponibles et invendues.
-- **Jamais à perte** (onglet Vente, activé par défaut) : si le prix FUTBIN baisse juste après l'achat, la carte est mise
-  en vente au seuil de rentabilité (prix payé + taxe EA de 5 % + bénéfice minimum), jamais en dessous.
-- **Anti-perte avant l'achat** (onglet Achat, activé par défaut) : le bot n'achète pas (et n'enchérit pas) si la revente
-  prévue ne laisse pas le bénéfice minimum après la taxe EA. Revente prévue = prix fixe, ou prix FUTBIN × bas de la plage
-  de vente, ramenée juste sous une annonce moins chère de la même carte vue dans la recherche. Un réglage qui perd
-  forcément (ex. achat 95 % et vente 99 % du prix FUTBIN) est signalé au démarrage.
-- **Achat immédiat comparé à FUTBIN** : sous le bouton « Achat immédiat » d'une annonce, prix FUTBIN, % payé et
-  bénéfice (vert) ou perte (rouge) d'une revente au prix FUTBIN après taxe. La touche d'achat immédiat (B) est bloquée
-  quand l'achat ferait perdre des pièces (le clic à la souris reste possible).
-- **Étiquette de prix** en haut de chaque carte joueur (club, marché, transferts, équipes, DCE) ; clic = page FUTBIN.
-- **Panneau « Mettre en vente » d'EA** : prix FUTBIN de la carte et bouton **Remplir** (tu valides avec le bouton EA).
-  Bouton **Prix min EA** : quelques recherches exactes trouvent l'annonce la moins chère du moment, puis **Remplir**
-  propose un palier en dessous.
-- **Score d'objet** (points de galerie, pastille gemme) à côté du prix FUTBIN sur chaque carte, lu sur FUTBIN avec le prix.
-- **Bonnes affaires** : sur le marché, une annonce sous X % du prix FUTBIN (90 % par défaut) est surlignée en vert
-  avec l'écart et le bénéfice estimé après taxe. Sur tes cartes seulement (club, transferts) : **prix payé** et
-  bénéfice estimé.
+- **Compra al % del precio de FUTBIN** (pestaña Objetivo → Precio de compra → Modo): por ejemplo, 90 %; el precio máximo de compra
+  se recalcula en cada actualización del precio. Un precio fijo puede servir como tope absoluto. Funciona para una versión
+  específica, para todas las versiones de un jugador o para todos los jugadores de un filtro (lista de FUTBIN): cada carta
+  tiene su propio precio máximo.
+  Sin un precio de FUTBIN reciente (menos de 5 min), el filtro espera: nunca compra con un precio desactualizado.
+- **Reventa al % del precio de FUTBIN** (pestaña Venta, o por filtro): el precio de la versión comprada se vuelve a leer justo
+  después de la compra. Sin precio de FUTBIN, la carta va a la lista de transferibles sin ponerse en venta.
+- **Relistar al precio de FUTBIN** y botón **Listar al precio de FUTBIN** (pestaña Traspasos) para las cartas disponibles y no vendidas.
+- **Nunca con pérdidas** (pestaña Venta, activado por defecto): si el precio de FUTBIN baja justo después de la compra, la carta se pone
+  en venta en el umbral de rentabilidad (precio pagado + impuesto del 5 % de EA + beneficio mínimo), nunca por debajo.
+- **Antipérdidas antes de la compra** (pestaña Compra, activado por defecto): el bot no compra (ni puja) si la reventa
+  prevista no deja el beneficio mínimo tras el impuesto de EA. Reventa prevista = precio fijo, o precio de FUTBIN × parte baja del rango
+  de venta, ajustada justo por debajo de un anuncio más barato de la misma carta visto en la búsqueda. Una configuración que pierde
+  seguro (ej. compra al 95 % y venta al 99 % del precio de FUTBIN) se avisa al iniciar.
+- **Compra ya comparado con FUTBIN**: debajo del botón «Comprar ya» de un anuncio, precio de FUTBIN, % pagado y
+  beneficio (verde) o pérdida (rojo) de una reventa al precio de FUTBIN tras impuestos. La tecla de compra inmediata (B) se bloquea
+  cuando la compra haría perder monedas (el clic con el ratón sigue siendo posible).
+- **Etiqueta de precio** en la parte superior de cada carta de jugador (club, mercado, traspasos, plantillas, DCP); clic = página de FUTBIN.
+- **Panel «Poner en mercado» de EA**: precio de FUTBIN de la carta y botón **Rellenar** (tú confirmas con el botón de EA).
+  Botón **Precio mín. EA**: unas pocas búsquedas exactas encuentran el anuncio más barato del momento y luego **Rellenar**
+  propone un escalón por debajo.
+- **Puntuación de artículo** (puntos de galería, insignia de gema) junto al precio de FUTBIN en cada carta, leído en FUTBIN junto con el precio.
+- **Gangas**: en el mercado, un anuncio por debajo del X % del precio de FUTBIN (90 % por defecto) se resalta en verde
+  con la diferencia y el beneficio estimado tras impuestos. Solo en tus cartas (club, traspasos): **precio pagado** y
+  beneficio estimado.
 
-Rafraîchissement intelligent : les cibles du bot et les achats DCE sont relus toutes les 60 à 120 s, les cartes
-affichées toutes les ~2 min (moins souvent si le prix ne bouge pas), une seule requête FUTBIN à la fois, espacées,
-ralentissement automatique si FUTBIN bloque, et un saut de prix anormal est vérifié une seconde fois avant d'être utilisé.
-FUTBIN ne pousse pas ses prix : ils sont relus régulièrement tant que la carte est suivie.
+Actualización inteligente: los objetivos del bot y las compras de DCP se vuelven a leer cada 60 a 120 s, las cartas
+mostradas cada ~2 min (con menos frecuencia si el precio no se mueve), una sola petición a FUTBIN a la vez, espaciadas,
+ralentización automática si FUTBIN bloquea, y un salto de precio anormal se verifica una segunda vez antes de usarse.
+FUTBIN no envía sus precios automáticamente: se vuelven a leer regularmente mientras la carta esté en seguimiento.
 
-Si FUTBIN renvoie une vérification Cloudflare, ouvre futbin.com dans un onglet et passe la vérification ;
-le secours « page FUTBIN cachée » (iframe invisible) prend le relais quand la requête directe est refusée.
+Si FUTBIN devuelve una verificación de Cloudflare, abre futbin.com en una pestaña y pasa la verificación;
+el respaldo «página de FUTBIN oculta» (iframe invisible) toma el relevo cuando la petición directa es rechazada.
 
-## DCE : solutions FUTBIN
+## DCP: soluciones de FUTBIN
 
-1. Ouvre l'équipe d'un défi (écran avec le terrain) et clique sur **⚡ Solution FUTBIN** en haut de l'écran.
-2. Colle le lien FUTBIN de la solution (page de l'équipe) puis **Charger** : formation, 11 joueurs, ceux de ton club
-   (et du stockage DCE, prêts exclus, non échangeables en priorité) et ceux **à acheter** avec leur prix FUTBIN.
-3. **Placer dans l'équipe** : la formation est appliquée et les joueurs sont placés à un poste où ils sont jouables.
-4. Vérifie ou modifie le **prix max** de chaque manquant (prix FUTBIN + marge réglable), puis **Acheter les manquants** :
-   recherche exacte de la version, la moins chère d'abord, achat, envoi au club et placement dans le défi.
+1. Abre la plantilla de un desafío (pantalla con el campo) y haz clic en **⚡ Solución FUTBIN** en la parte superior de la pantalla.
+2. Pega el enlace de FUTBIN de la solución (página de la plantilla) y pulsa **Cargar**: formación, 11 jugadores, los de tu club
+   (y del almacén de DCP, cesiones excluidas, intransferibles con prioridad) y los que **faltan por comprar** con su precio de FUTBIN.
+3. **Colocar en la plantilla**: se aplica la formación y los jugadores se colocan en una posición en la que puedan jugar.
+4. Revisa o modifica el **precio máximo** de cada jugador faltante (precio de FUTBIN + margen ajustable) y pulsa **Comprar faltantes**:
+   búsqueda exacta de la versión, la más barata primero, compra, envío al club y colocación en el desafío.
 
-Le défi n'est jamais envoyé automatiquement : c'est toi qui cliques sur « Envoyer ». Captcha, session expirée ou
-limitation EA arrêtent l'achat immédiatement ; le bouton **Stop** l'arrête à tout moment.
+El desafío nunca se envía automáticamente: eres tú quien hace clic en «Enviar». Captcha, sesión expirada o
+limitación de EA detienen la compra inmediatamente; el botón **Detener** la para en cualquier momento.
 
-- **DCE répétables** : la solution utilisée est mémorisée par défi. En rouvrant le défi, **⚡ Solution FUTBIN** la relit
-  (cartes du club repérées) ; **Placer dans l'équipe**, **Acheter les manquants**, puis envoyer.
-- **Valeur FUTBIN de l'équipe** du défi affichée sous le bouton (somme des prix des joueurs placés).
-- **Collections masquées** : bouton × sur une collection de la liste des DCE ; réaffichage dans l'onglet Outils.
-- **Après l'envoi** : bouton **Ranger les non attribués** (doublons non échangeables → stockage DCE, le reste au club).
-- **Alerte** quand EA refuse les DCE (trop de requêtes, vérification, blocage temporaire) : la tâche en cours s'arrête.
+- **DCP repetibles**: la solución utilizada se guarda por desafío. Al volver a abrir el desafío, **⚡ Solución FUTBIN** la vuelve a leer
+  (cartas del club detectadas); **Colocar en la plantilla**, **Comprar faltantes** y luego enviar.
+- **Valor de FUTBIN de la plantilla** del desafío mostrado debajo del botón (suma de los precios de los jugadores colocados).
+- **Colecciones ocultas**: botón × en una colección de la lista de DCP; se puede volver a mostrar desde la pestaña Herramientas.
+- **Después del envío**: botón **Ordenar sin asignar** (duplicados intransferibles → almacén de DCP, el resto al club).
+- **Alerta** cuando EA rechaza los DCP (demasiadas peticiones, verificación, bloqueo temporal): la tarea en curso se detiene.
 
-## Galerie (FC 27)
+## Galería (FC 27)
 
-Tuile **Galerie** sur l'accueil du web app, à côté de « FC Hub » et au même format : elle ouvre des écrans du web app
-(titre et bouton retour EA). Données et prix : **FUTBIN**.
+Mosaico **Galería** en el inicio de la web app, junto a «FC Hub» y con el mismo formato: abre pantallas de la web app
+(título y botón de volver de EA). Datos y precios: **FUTBIN**.
 
-1. **Catégories** (logos des ligues, jetons de galerie à gagner) puis **collections** : barre de paliers D à S
-   (points requis, récompenses au survol), tes cartes et ton score sur les collections déjà ouvertes.
-   Les joueurs s'affichent avec les **vraies cartes du web app EA** (onglets Liste prête / Manquants / À toi).
-2. En ouvrant une collection, tout se fait seul : joueurs éligibles lus sur FUTBIN, tes cartes repérées (club,
-   stockage DCE, cartes déjà collectées), puis **liste prête** : les joueurs les moins chers au prix FUTBIN pour
-   atteindre le palier suivant, tes cartes d'abord. Le score suit le calcul de FUTBIN (points + bonus : attaque,
-   même club, nations différentes, premier propriétaire…).
-3. **Acheter N joueurs** (après confirmation) : chaque manquant est acheté au prix FUTBIN + marge DCE puis envoyé au club.
-   **Acheter + revendre au même prix** : après tous les achats, chaque carte est remise en vente à son prix d'achat
-   (vente groupée ; taxe EA de 5 % à la vente). Bouton **+ Acheter** sur chaque joueur, **+ / −** pour modifier la liste,
-   choix du palier visé.
+1. **Categorías** (logos de las ligas, fichas de galería por ganar) y luego **colecciones**: barra de niveles D a S
+   (puntos necesarios, recompensas al pasar el ratón), tus cartas y tu puntuación en las colecciones ya abiertas.
+   Los jugadores se muestran con las **cartas reales de la web app de EA** (pestañas Lista lista / Faltantes / Tuyos).
+2. Al abrir una colección, todo se hace solo: jugadores elegibles leídos en FUTBIN, tus cartas detectadas (club,
+   almacén de DCP, cartas ya coleccionadas) y luego **lista preparada**: los jugadores más baratos al precio de FUTBIN para
+   alcanzar el siguiente nivel, tus cartas primero. La puntuación sigue el cálculo de FUTBIN (puntos + bonificaciones: ataque,
+   mismo club, naciones diferentes, primer propietario…).
+3. **Comprar N jugadores** (tras confirmación): cada jugador faltante se compra al precio de FUTBIN + margen de DCP y se envía al club.
+   **Comprar + revender al mismo precio**: tras todas las compras, cada carta se vuelve a poner en venta a su precio de compra
+   (venta masiva; impuesto del 5 % de EA en la venta). Botón **+ Comprar** en cada jugador, **+ / −** para modificar la lista,
+   elección del nivel objetivo.
 
-Le web app n'affiche pas la galerie : une carte compte comme « collectée » quand elle est vue dans ton club / stockage
-ou achetée par cet outil (historique local), et devient gratuite dans les plans suivants.
+La web app no muestra la galería: una carta cuenta como «coleccionada» cuando se ve en tu club / almacén
+o cuando la compra esta herramienta (historial local), y pasa a ser gratuita en los planes siguientes.
 
-## Outils
+## Herramientas
 
-Onglet **Outils** :
+Pestaña **Herramientas**:
 
-- **Compteur de requêtes EA** : recherches du bot et faites à la main sur la dernière heure et les dernières 24 h,
-  achats / enchères. Alerte à 90 % et 100 % des limites (900/h et 4 500/24 h par défaut) ; **pause automatique** en option :
-  le bot attend de repasser sous la limite, les achats DCE / galerie et le prix min EA s'arrêtent.
-- **Raccourcis clavier** (touches modifiables, affichées sur les boutons EA) : Entrée = rechercher, B = achat immédiat
-  (puis Entrée valide cet achat ; une confirmation ouverte à la souris, comme une vente rapide, n'est jamais validée
-  au clavier), N = enchérir, L = mettre en vente, Retour arrière = retour, ↑ ↓ = carte précédente / suivante,
-  ← → = page, + / − et Page haut / bas = prix min / max, Échap = annuler, M = ouvrir MagicBuyer.
-  Inactifs pendant la saisie dans un champ.
-- **Club** : export CSV (note, poste, échangeable, premier propriétaire, prix payé, prix FUTBIN, score d'objet, vente rapide ;
-  prix FUTBIN manquants lus en option), envoi groupé vers la liste des transferts par note / prix FUTBIN, stockage DCE → club
-  (cartes qui ne sont plus des doublons), vente rapide des non échangeables sur une plage de notes. Aperçu (avec les noms)
-  et confirmation avant chaque action ; si l'équipe active ne peut pas être lue, rien n'est fait : ses joueurs ne sont jamais touchés.
-- **Packs** : ouverture des packs déjà possédés (« Mes packs », aucun achat) avec rangement automatique après chaque pack :
-  doublons non échangeables → stockage DCE, doublons échangeables et échangeables valant au moins X sur FUTBIN → liste
-  des transferts, vente rapide optionnelle des non échangeables jusqu'à une note, le reste au club (jamais un doublon).
-  S'il reste une carte dans les non attribués, l'ouverture s'arrête. Valeur FUTBIN de chaque pack dans le journal.
+- **Contador de peticiones a EA**: búsquedas del bot y manuales en la última hora y las últimas 24 h,
+  compras / pujas. Alerta al 90 % y 100 % de los límites (900/h y 4 500/24 h por defecto); **pausa automática** opcional:
+  el bot espera a volver a estar por debajo del límite, las compras de DCP / galería y el precio mín. de EA se detienen.
+- **Atajos de teclado** (teclas modificables, mostradas en los botones de EA): Intro = buscar, B = compra inmediata
+  (luego Intro confirma esa compra; una confirmación abierta con el ratón, como una venta rápida, nunca se confirma
+  con el teclado), N = pujar, L = poner en mercado, Retroceso = volver, ↑ ↓ = carta anterior / siguiente,
+  ← → = página, + / − y Re Pág / Av Pág = precio mín. / máx., Esc = cancelar, M = abrir MagicBuyer.
+  Inactivos mientras se escribe en un campo de texto.
+- **Club**: exportación CSV (media, posición, transferible, primer propietario, precio pagado, precio de FUTBIN, puntuación de artículo, venta rápida;
+  precios de FUTBIN faltantes leídos opcionalmente), envío masivo a la lista de transferibles por media / precio de FUTBIN, almacén de DCP → club
+  (cartas que ya no son duplicados), venta rápida de intransferibles en un rango de medias. Vista previa (con los nombres)
+  y confirmación antes de cada acción; si no se puede leer la plantilla activa, no se hace nada: sus jugadores nunca se tocan.
+- **Sobres**: apertura de los sobres que ya tienes («Mis sobres», sin compras) con ordenación automática tras cada sobre:
+  duplicados intransferibles → almacén de DCP, duplicados transferibles y transferibles que valgan al menos X en FUTBIN → lista
+  de transferibles, venta rápida opcional de intransferibles hasta una media, el resto al club (nunca un duplicado).
+  Si queda alguna carta en sin asignar, la apertura se detiene. Valor de FUTBIN de cada sobre en el registro.
 
-Ces outils ne tournent jamais en même temps que le bot ni qu'une autre tâche (une seule suite de requêtes EA à la fois).
+Estas herramientas nunca se ejecutan al mismo tiempo que el bot ni que otra tarea (una sola secuencia de peticiones a EA a la vez).
 
-## Comment le sniper évite de rater une affaire
+## Cómo evita el sniper perder una ganga
 
-- **Résultats frais à chaque recherche** : le cache du web app est vidé et chaque requête est différente
-  (anti-cache « automatique » : l'enchère max varie *au-dessus* de ton prix d'achat max, donc aucune annonce achetable n'est exclue).
-- **Achat immédiat** dès la réponse d'EA, sans attendre FUTBIN ni aucune autre requête.
-- **La moins chère d'abord**, puis la plus récente à prix égal ; tes propres annonces sont ignorées.
-- **Revente après l'achat**, jamais pendant : la recherche suivante n'est pas retardée.
-- **Onglet actif en arrière-plan** : Chrome ralentit les onglets cachés ; l'option « Garder l'onglet actif » l'en empêche
-  (une icône haut-parleur apparaît sur l'onglet, aucun son n'est émis).
+- **Resultados frescos en cada búsqueda**: la caché de la web app se vacía y cada petición es diferente
+  (anticaché «automático»: la puja máx. varía *por encima* de tu precio máximo de compra, por lo que no se excluye ningún anuncio comprable).
+- **Compra inmediata** en cuanto llega la respuesta de EA, sin esperar a FUTBIN ni a ninguna otra petición.
+- **La más barata primero**, luego la más reciente a igualdad de precio; tus propios anuncios se ignoran.
+- **Reventa después de la compra**, nunca durante: la siguiente búsqueda no se retrasa.
+- **Pestaña activa en segundo plano**: Chrome ralentiza las pestañas ocultas; la opción «Mantener la pestaña activa» lo impide
+  (aparece un icono de altavoz en la pestaña, no se emite ningún sonido).
 
-## Réglages
+## Ajustes
 
-| Onglet | Réglages principaux |
+| Pestaña | Ajustes principales |
 | --- | --- |
-| **Cible** | Filtres enregistrés, rotation entre filtres, joueur, qualité, poste, note min/max, prix d'achat (fixe ou % FUTBIN en direct, plafond), revente (onglet Vente, fixe ou % FUTBIN), enchère max, IDs avancés (version exacte, rareté, nation, ligue, club, style). |
-| **Achat** | Achats max par recherche, arrêt après N achats, réserve de coins, seuil de résultats, ignorer les gardiens, enchères (fenêtre de fin, surenchère, enchères actives max). |
-| **Vente** | Mise en vente automatique / envoi en liste des transferts / rien, prix fixe ou % du prix FUTBIN, durée, bénéfice minimum. |
-| **Timing** | Profils Prudent / Normal / Rapide, temps entre recherches, recherches max par minute, pause toutes les N recherches, durée de pause, arrêt automatique, délai après achat, anti-cache, pages parcourues, pause de sécurité sur limitation EA. |
-| **Transferts** | État de la liste, relist des invendus (même prix ou prix FUTBIN), mise en vente groupée au prix FUTBIN, vider les vendus, arrêt si la liste est pleine. |
-| **FUTBIN** | Test d'accès, plateforme des prix, fréquence de rafraîchissement, garde-fou sur les sauts de prix, étiquettes sur les cartes, réglages des achats DCE. |
-| **Outils** | Compteur de requêtes EA et pause auto, bonnes affaires, prix payé, score d'objet, prix min EA, raccourcis clavier, club, packs, DCE (valeur, alerte, collections masquées). |
-| **Alertes** | Langue de l'interface, sons, notifications du navigateur, webhook Discord, bot Telegram, choix des événements notifiés. |
+| **Objetivo** | Filtros guardados, rotación entre filtros, jugador, calidad, posición, media mín./máx., precio de compra (fijo o % FUTBIN en directo, tope), reventa (pestaña Venta, fijo o % FUTBIN), puja máx., IDs avanzados (versión exacta, rareza, nación, liga, club, estilo). |
+| **Compra** | Compras máx. por búsqueda, detener tras N compras, reserva de monedas, umbral de resultados, ignorar porteros, pujas (ventana final, sobrepuja, pujas activas máx.). |
+| **Venta** | Puesta en venta automática / envío a lista de transferibles / nada, precio fijo o % del precio de FUTBIN, duración, beneficio mínimo. |
+| **Timing** | Perfiles Prudente / Normal / Rápido, tiempo entre búsquedas, búsquedas máx. por minuto, pausa cada N búsquedas, duración de pausa, detención automática, retraso tras compra, anticaché, páginas recorridas, pausa de seguridad por limitación de EA. |
+| **Traspasos** | Estado de la lista, relistar no vendidos (mismo precio o precio de FUTBIN), puesta en venta masiva al precio de FUTBIN, limpiar vendidos, detener si la lista está llena. |
+| **FUTBIN** | Prueba de acceso, plataforma de precios, frecuencia de actualización, protección contra saltos de precio, etiquetas en las cartas, ajustes de compras de DCP. |
+| **Herramientas** | Contador de peticiones a EA y pausa auto, gangas, precio pagado, puntuación de artículo, precio mín. EA, atajos de teclado, club, sobres, DCP (valor, alerta, colecciones ocultas). |
+| **Alertas** | Idioma de la interfaz, sonidos, notificaciones del navegador, webhook de Discord, bot de Telegram, elección de eventos notificados. |
 
-Formats acceptés pour les durées : `5-9` (secondes), `4.5-7`, `40-80S`, `5M`, `1-2H`, `1D`.
-Toutes les valeurs sont enregistrées automatiquement (stockage Tampermonkey).
+Formatos aceptados para las duraciones: `5-9` (segundos), `4.5-7`, `40-80S`, `5M`, `1-2H`, `1D`.
+Todos los valores se guardan automáticamente (almacenamiento de Tampermonkey).
 
-### Profils de timing
+### Perfiles de timing
 
-| Profil | Entre deux recherches | Max / minute | Pause | Arrêt auto |
+| Perfil | Entre dos búsquedas | Máx. / minuto | Pausa | Detención auto |
 | --- | --- | --- | --- | --- |
-| Prudent | 8 à 14 s | 6 | 60–120 s toutes les 12–18 recherches | 1–2 h |
-| Normal (défaut) | 5 à 9 s | 10 | 40–80 s toutes les 15–25 recherches | 2–3 h |
-| Rapide | 3 à 5 s | 15 | 30–60 s toutes les 20–30 recherches | 1–1,5 h |
+| Prudente | 8 a 14 s | 6 | 60–120 s cada 12–18 búsquedas | 1–2 h |
+| Normal (por defecto) | 5 a 9 s | 10 | 40–80 s cada 15–25 búsquedas | 2–3 h |
+| Rápido | 3 a 5 s | 15 | 30–60 s cada 20–30 búsquedas | 1–1,5 h |
 
-Plus le rythme est rapide, plus EA déclenche vite des captchas et des limitations.
+Cuanto más rápido es el ritmo, antes activa EA captchas y limitaciones.
 
-### Sécurité
+### Seguridad
 
-- **Captcha (458)**, **session expirée (401)**, **marché verrouillé (494)**, **compte bloqué** : arrêt immédiat + alerte.
-- **Trop de requêtes (429) / blocage temporaire (512, 521)** : pause de sécurité (4 à 8 min par défaut), arrêt si ça se répète.
-- **3 recherches en échec d'affilée** : arrêt.
-- Codes d'erreur personnalisés : onglet Timing → Erreurs EA.
+- **Captcha (458)**, **sesión expirada (401)**, **mercado bloqueado (494)**, **cuenta bloqueada**: detención inmediata + alerta.
+- **Demasiadas peticiones (429) / bloqueo temporal (512, 521)**: pausa de seguridad (4 a 8 min por defecto), detención si se repite.
+- **3 búsquedas fallidas seguidas**: detención.
+- Códigos de error personalizados: pestaña Timing → Errores de EA.
 
-Le script ne résout jamais les captchas : résous-le toi-même dans le web app, puis relance.
+El script nunca resuelve captchas: resuélvelo tú mismo en la web app y luego reinicia.
 
-## Compiler depuis les sources
+## Compilar desde las fuentes
 
 ```bash
 npm install
 npm run build:prod
 ```
 
-Le script est généré dans `dist/fut-auto-buyer.user.js` (en-tête Tampermonkey dans `tampermonkey-header.js`).
+El script se genera en `dist/fut-auto-buyer.user.js` (cabecera de Tampermonkey en `tampermonkey-header.js`).
 
-## Nouveautés 5.4.6
+## Novedades 5.4.6
 
-- Galerie (et autres pages futbin.com) : FUTBIN refuse ses pages aux requêtes du script (403, vérification
-  Cloudflare) et l'iframe cachée ne passe plus (Chrome n'y envoie pas les cookies du site). Le script ouvre alors
-  un onglet futbin.com en arrière-plan et y fait la requête comme ton navigateur, puis récupère la réponse par le
-  stockage de Tampermonkey : galerie, collections, recherche de joueurs d'une collection, pages joueur ou listes en
-  secours. Une requête à la fois, onglet fermé tout seul après 5 min sans usage. Réglage : onglet FUTBIN →
-  « Secours : onglet FUTBIN ». Tampermonkey demande d'autoriser l'ouverture d'onglets à la mise à jour.
+- Galería (y otras páginas de futbin.com): FUTBIN rechaza sus páginas a las peticiones del script (403, verificación de
+  Cloudflare) y el iframe oculto ya no funciona (Chrome no envía las cookies del sitio allí). El script abre entonces
+  una pestaña de futbin.com en segundo plano y realiza allí la petición como tu navegador, recuperando la respuesta mediante el
+  almacenamiento de Tampermonkey: galería, colecciones, búsqueda de jugadores de una colección, páginas de jugador o listas de
+  respaldo. Una petición a la vez, la pestaña se cierra sola tras 5 min sin uso. Ajuste: pestaña FUTBIN →
+  «Respaldo: pestaña FUTBIN». Tampermonkey pedirá permiso para abrir pestañas al actualizar.
 
-## Nouveautés 5.4.5
+## Novedades 5.4.5
 
-- Recherche de joueur (onglet Cible) par l'API de l'appli FUTBIN : toutes les versions en ~0,2 s, au lieu d'attendre
-  la recherche futbin.com que FUTBIN refuse au script (jusqu'à 20 s bloqué). Versions spéciales nommées par EA,
-  cartes holo signalées. Les filtres « joueur, toutes versions » trouvent ses versions de la même façon.
-- Onglet Cible : Type (toutes les raretés du jeu), Holo (holo seulement / sans holo), Style de chimie, Nation,
-  Championnat et Club se choisissent dans des listes avec les noms du jeu, à côté de Qualité et Poste : plus aucun
-  identifiant à taper. Les clubs suivent le championnat choisi ; deux clubs du même nom (équipes masculine et
-  féminine) portent leur championnat entre parenthèses. La liste des filtres affiche ces noms (ex. « style Ombre »).
+- Búsqueda de jugador (pestaña Objetivo) mediante la API de la app de FUTBIN: todas las versiones en ~0,2 s, en lugar de esperar
+  a la búsqueda de futbin.com que FUTBIN rechaza al script (hasta 20 s bloqueado). Versiones especiales nombradas por EA,
+  cartas holo señaladas. Los filtros «jugador, todas las versiones» encuentran sus versiones de la misma manera.
+- Pestaña Objetivo: Tipo (todas las rarezas del juego), Holo (solo holo / sin holo), Estilo de química, Nación,
+  Liga y Club se eligen en listas con los nombres del juego, junto a Calidad y Posición: ya no hace falta escribir ningún
+  identificador. Los clubes siguen a la liga elegida; dos clubes con el mismo nombre (equipos masculino y
+  femenino) llevan su liga entre paréntesis. La lista de filtros muestra estos nombres (ej. «estilo Sombra»).
 
-## Nouveautés 5.4.4
+## Novedades 5.4.4
 
-- Solveur DCE : les cartes à acheter (joueurs qui manquent au club, ex. « Italie : 2 min. ») sont lues par l'API
-  de l'appli FUTBIN (listes filtrées par nation, championnat, club, notes et qualité, triées par prix, avec les
-  identifiants EA et les postes). Les listes futbin.com, que FUTBIN refuse aux requêtes du script (403), ne servent
-  plus qu'en secours : le solveur ne s'arrête plus sur « FUTBIN bloque la lecture des prix ».
+- Solucionador de DCP: las cartas por comprar (jugadores que faltan en el club, ej. «Italia: 2 mín.») se leen mediante la API
+  de la app de FUTBIN (listas filtradas por nación, liga, club, medias y calidad, ordenadas por precio, con los
+  identificadores de EA y las posiciones). Las listas de futbin.com, que FUTBIN rechaza a las peticiones del script (403), solo sirven
+  como respaldo: el solucionador ya no se detiene con «FUTBIN bloquea la lectura de precios».
 
-## Nouveautés 5.4.3
+## Novedades 5.4.3
 
-- Tableau « Prime holo » plus compact : la colonne « Achat max » tient dans le panneau (promo retirée des lignes,
-  la promo scannée est celle du menu).
+- Tabla «Prima holo» más compacta: la columna «Compra máx.» cabe en el panel (promo eliminada de las filas,
+  la promo escaneada es la del menú).
 
-## Nouveautés 5.4.2
+## Novedades 5.4.2
 
-- Onglet FUTBIN, section « Prime holo » : chaque carte promo existe en version normale et en version holo, plus
-  rare et plus chère (TOTW 1 à 4 au 09/10/2026 : holo 1,3 à 3 fois la normale ; TOTW 80 ~10 500 contre ~14 000,
-  Lewandowski 85 13 750 contre ~44 000). Le scan demande à EA toutes les cartes de la promo choisie (recherche
-  « concept » par rareté : une requête pour les 184 TOTW, aucune recherche sur le marché des transferts) ; la holo
-  porte l'habillage holo d'EA. Puis il lit le prix FUTBIN de la holo et de sa version normale par l'API de l'appli
-  FUTBIN (une recherche par joueur). Les listes futbin.com ne servent pas : FUTBIN les refuse aux requêtes du script.
-  Le tableau donne, par holo de la tranche de prix : prix normal, prix holo, gain (holo payée au prix normal,
-  revendue au prix holo, après taxe) et achat max (plus haut prix qui laisse le bénéfice minimum à l'achat, 1 000
-  par défaut).
-- « Créer les filtres cochés » : un filtre « prix marché EA » par holo (version exacte, achat à 90 % du prix relu,
-  plafond = achat max), désactivé pour en faire tourner 3 à la fois. Une version déjà ciblée n'est pas recréée.
+- Pestaña FUTBIN, sección «Prima holo»: cada carta promo existe en versión normal y en versión holo, más
+  rara y más cara (TOTW 1 a 4 al 09/10/2026: holo 1,3 a 3 veces la normal; TOTW 80 ~10 500 frente a ~14 000,
+  Lewandowski 85 13 750 frente a ~44 000). El escaneo pide a EA todas las cartas de la promo elegida (búsqueda
+  «concepto» por rareza: una petición para los 184 TOTW, ninguna búsqueda en el mercado de transferibles); la holo
+  lleva el aspecto holo de EA. Luego lee el precio de FUTBIN de la holo y de su versión normal mediante la API de la app de
+  FUTBIN (una búsqueda por jugador). Las listas de futbin.com no se usan: FUTBIN las rechaza a las peticiones del script.
+  La tabla muestra, por cada holo del rango de precios: precio normal, precio holo, ganancia (holo pagada al precio normal,
+  revendida al precio holo, tras impuestos) y compra máx. (el precio más alto que deja el beneficio mínimo en la compra, 1 000
+  por defecto).
+- «Crear los filtros marcados»: un filtro «precio mercado EA» por holo (versión exacta, compra al 90 % del precio releído,
+  tope = compra máx.), desactivado para hacer funcionar 3 a la vez. Una versión ya seleccionada como objetivo no se vuelve a crear.
 
-## Nouveautés 5.4.1
+## Novedades 5.4.1
 
-- Première version du scanner de prime holo, par les listes futbin.com : FUTBIN les refuse aux requêtes du script
-  (403), d'où la 5.4.2.
-- Correction : la marque holo de l'API FUTBIN venait du champ « signature », qui ne marque que les holo des têtes
-  d'affiche (15 TOTW sur 92). Elle vient maintenant de l'animation holo de FUTBIN.
+- Primera versión del escáner de prima holo, mediante las listas de futbin.com: FUTBIN las rechaza a las peticiones del script
+  (403), de ahí la 5.4.2.
+- Corrección: la marca holo de la API de FUTBIN venía del campo «signature», que solo marca las holo de los jugadores
+  destacados (15 TOTW de 92). Ahora viene de la animación holo de FUTBIN.
 
-## Nouveautés 5.4.0
+## Novedades 5.4.0
 
-- Prix FUTBIN par l'API de l'appli FUTBIN (futbin.org) : une requête JSON légère par joueur renvoie toutes
-  ses versions (prix console et PC, prix précédent, plage de prix EA, tendance, type de carte, marque holo),
-  sans page de vérification Cloudflare. La carte est retrouvée par son identifiant EA exact ; les autres versions
-  du même joueur reçoivent leur prix au passage, et une version lue il y a moins de 60 s est reprise sans requête.
-- Les pages futbin.com restent le secours automatique : API refusée (pause de 3 min), muette ou carte introuvable
-  par son nom. Les listes (balayages, DCE, galerie) passent toujours par les pages.
-- Types de carte appris tout seuls des images FUTBIN (3 = Team of the Week, 22 = Destined for Glory…) : aucune
-  liste à mettre à jour à chaque nouvelle promo. La marque holo vient de FUTBIN (plus fiable que l'identifiant).
-- Onglet FUTBIN : « Source des prix FUTBIN » (API + pages en secours, ou pages seules), requêtes API dans l'état,
-  et le bouton Tester essaie d'abord l'API. Tampermonkey demande d'autoriser futbin.org à la mise à jour.
+- Precios de FUTBIN mediante la API de la app de FUTBIN (futbin.org): una petición JSON ligera por jugador devuelve todas
+  sus versiones (precios en consola y PC, precio anterior, rango de precios de EA, tendencia, tipo de carta, marca holo),
+  sin página de verificación de Cloudflare. La carta se encuentra por su identificador exacto de EA; las demás versiones
+  del mismo jugador reciben su precio de paso, y una versión leída hace menos de 60 s se reutiliza sin hacer petición.
+- Las páginas de futbin.com siguen siendo el respaldo automático: API rechazada (pausa de 3 min), sin respuesta o carta no encontrada
+  por su nombre. Las listas (barridos, DCP, galería) siguen pasando por las páginas.
+- Tipos de carta aprendidos automáticamente de las imágenes de FUTBIN (3 = Team of the Week, 22 = Destined for Glory…): ninguna
+  lista que actualizar en cada nueva promo. La marca holo viene de FUTBIN (más fiable que el identificador).
+- Pestaña FUTBIN: «Fuente de precios FUTBIN» (API + páginas de respaldo, o solo páginas), peticiones de API en el estado,
+  y el botón Probar intenta primero la API. Tampermonkey pedirá permiso para futbin.org al actualizar.
 
-## Nouveautés 5.3.17
+## Novedades 5.3.17
 
-- Onglet Achat : « Bénéfice minimum à l'achat ». L'anti-perte avant l'achat exige ce bénéfice (ex. 1 000), tandis
-  que le prix plancher de remise en vente garde celui de l'onglet Vente (ex. 100) : une carte achetée avec +1 000
-  prévu peut repartir plus bas si son marché baisse, au lieu de rester bloquée à prix payé + 1 000.
+- Pestaña Compra: «Beneficio mínimo en la compra». El antipérdidas antes de la compra exige este beneficio (ej. 1 000), mientras
+  que el precio suelo de puesta en venta mantiene el de la pestaña Venta (ej. 100): una carta comprada con +1 000
+  previsto puede salir más barata si su mercado baja, en lugar de quedarse bloqueada a precio pagado + 1 000.
 
-## Nouveautés 5.3.16
+## Novedades 5.3.16
 
-- Aucun changement de comportement. Essai abandonné : le marché des transferts du web app FC 27 n'envoie pas la
-  note (ovrMin / ovrMax) à EA, une recherche « joueurs or note 88 » reste impossible ; la note des filtres reste
-  appliquée par le bot sur les résultats.
+- Sin cambios de comportamiento. Prueba abandonada: el mercado de transferibles de la web app de FC 27 no envía la
+  media (ovrMin / ovrMax) a EA, una búsqueda de «jugadores oro media 88» sigue siendo imposible; la media de los filtros sigue
+  siendo aplicada por el bot sobre los resultados.
 
-## Nouveautés 5.3.15
+## Novedades 5.3.15
 
-- DCE : le bouton × qui masque une collection ne recouvre plus le bouton favori d'EA (coin haut droit des
-  tuiles). Il se place juste dessous. Après un masquage, « Annuler » reste affiché 6 s ; ensuite la collection se
-  réaffiche depuis l'onglet Outils (« Collections DCE masquées »).
+- DCP: el botón × que oculta una colección ya no tapa el botón de favorito de EA (esquina superior derecha de los
+  mosaicos). Se coloca justo debajo. Tras ocultar, «Deshacer» permanece visible 6 s; después, la colección se
+  vuelve a mostrar desde la pestaña Herramientas («Colecciones DCP ocultas»).
 
-## Nouveautés 5.3.14
+## Novedades 5.3.14
 
-- Prix marché EA : une annonce n'est écartée comme « bradée » qu'après vérification. EA trie les annonces par fin :
-  la page 1 montre celles qui finissent (souvent invendues, trop chères), pas les dernières postées. Quand le relevé
-  n'a pas vu toutes les annonces jusqu'à 11 % au-dessus du prix bas, une recherche plafonnée à ce niveau les montre
-  toutes, récentes comprises. Plusieurs annonces au même prix forment le prix du marché, jamais une affaire.
-- Filtre prix marché : 3 affaires ou plus d'un coup sous l'achat max = prix marché faux ou dépassé. Aucun achat,
-  prix relu avant la recherche suivante (comme une page pleine).
+- Precio mercado EA: un anuncio solo se descarta como «malvendido» tras verificación. EA ordena los anuncios por tiempo restante:
+  la página 1 muestra los que están por terminar (a menudo no vendidos, demasiado caros), no los últimos publicados. Cuando el sondeo
+  no ha visto todos los anuncios hasta un 11 % por encima del precio bajo, una búsqueda limitada a ese nivel los muestra
+  todos, incluidos los recientes. Varios anuncios al mismo precio forman el precio de mercado, nunca una ganga.
+- Filtro de precio de mercado: 3 gangas o más de golpe por debajo de la compra máx. = precio de mercado falso o desactualizado. Sin compras,
+  precio releído antes de la siguiente búsqueda (como una página llena).
 
-## Nouveautés 5.3.13
+## Novedades 5.3.13
 
-- Remise en vente au prix du marché : une carte avec un style de chimie (Ombre, Chasseur…) est comparée aux
-  annonces de la même variante, et une annonce bradée isolée ne sert plus de référence. Quand le relevé voit moins
-  de 3 annonces, une recherche de plus (jusqu'à 1,6 × le prix le plus bas) montre les suivantes.
+- Puesta en venta al precio de mercado: una carta con un estilo de química (Sombra, Cazador…) se compara con los
+  anuncios de la misma variante, y un anuncio malvendido aislado ya no sirve de referencia. Cuando el sondeo ve menos
+  de 3 anuncios, una búsqueda adicional (hasta 1,6 × el precio más bajo) muestra los siguientes.
 
-## Nouveautés 5.3.12
+## Novedades 5.3.12
 
-- Prix marché EA : une ou deux annonces bradées (plus de 10 % sous la 3e moins chère) ne font plus le prix de
-  référence ; elles sont signalées dans le journal et restent des affaires que le bot achète.
+- Precio mercado EA: uno o dos anuncios malvendidos (más de un 10 % por debajo del 3.º más barato) ya no marcan el precio de
+  referencia; se notifican en el registro y siguen siendo gangas que el bot compra.
 
-## Nouveautés 5.3.11
+## Novedades 5.3.11
 
-- **Prix marché EA** (3e mode de prix d'un filtre, version exacte) : le bot relève lui-même le prix « achat
-  immédiat » le plus bas de la carte sur le marché EA, style de chimie compris (ex. un joueur avec l'Ombre, que
-  FUTBIN ne cote pas). Achat jusqu'à X % de ce prix, revente un palier en dessous. Prix relu au démarrage, toutes
-  les N minutes (onglet Achat, 10 par défaut) et après chaque achat ; jusqu'à 4 recherches par relevé, comptées
-  dans le compteur de requêtes.
-- Page pleine d'annonces sous l'achat max d'un filtre prix marché : le prix relevé est dépassé, aucun achat, prix relu.
+- **Precio mercado EA** (3.er modo de precio de un filtro, versión exacta): el bot comprueba por sí mismo el precio de «compra
+  inmediata» más bajo de la carta en el mercado de EA, estilo de química incluido (ej. un jugador con Sombra, que
+  FUTBIN no cotiza). Compra hasta el X % de este precio, reventa un escalón por debajo. Precio releído al iniciar, cada
+  N minutos (pestaña Compra, 10 por defecto) y tras cada compra; hasta 4 búsquedas por sondeo, contadas
+  en el contador de peticiones.
+- Página llena de anuncios por debajo de la compra máx. de un filtro de precio de mercado: el precio registrado está desactualizado, sin compras, precio releído.
 
-## Nouveautés 5.3.10
+## Novedades 5.3.10
 
-- **Supprimer les inactifs** (onglet Cible) : supprime d'un coup tous les filtres désactivés, une seule confirmation.
-- **Bénéfice min** (onglet Vente) : montant libre en coins (10, 100…), plus arrondi à un prix EA (minimum 150 avant).
-- FUTBIN : un refus sur la recherche ou les listes (403) ne met plus en pause les pages joueur, qui continuent
-  d'être lues ; une page de vérification Cloudflare met toujours tout FUTBIN en pause.
+- **Eliminar inactivos** (pestaña Objetivo): elimina de golpe todos los filtros desactivados, con una sola confirmación.
+- **Beneficio mín.** (pestaña Venta): cantidad libre en monedas (10, 100…), ya no redondeada a un precio de EA (mínimo 150 antes).
+- FUTBIN: un rechazo en la búsqueda o en las listas (403) ya no pausa las páginas de jugador, que siguen
+  leyéndose; una página de verificación de Cloudflare sigue pausando todo FUTBIN.
 
-## Nouveautés 5.3.0
+## Novedades 5.3.0
 
-- Bénéfice réel : chaque vente vue pendant la session est comptée (prix de vente après taxe − prix payé),
-  dans le journal, l'historique, le bilan d'arrêt et sous le KPI « Profit estimé ».
-- Notifications : démarrage, carte vendue (avec le bénéfice), mise en vente ratée, et bilan toutes les N minutes
-  (recherches, achats, ventes, bénéfice réel, solde) en plus des événements existants.
-- Limites de sécurité toujours actives : 2 s au moins entre deux recherches, pause au plus toutes les 50 recherches,
-  arrêt au plus tard après 12 h, 1,5 à 2,5 s entre deux achats ou enchères d'une même recherche ; démarrage refusé
-  si EA bloque le marché des transferts (compte, console seulement, maintenance).
-- Filtres : export / import JSON (copier-coller), bilan de session par filtre (recherches, achats, dépensé, bénéfice)
-  dans la liste, préréglage **Fourrage DCE** (or 85 / 86 / 87 en mode FUTBIN, rotation).
-- Mode « % du prix FUTBIN » avec une plage de notes (ex. 85–85) : la liste FUTBIN des cartes les moins chères de ces
-  notes est suivie, sans joueur ni nation. **Enchère max en % du prix FUTBIN** de chaque carte (l'enchère fixe sert de plafond).
-- Outils → Club : **Analyser le club** (valeur FUTBIN des échangeables, coins investis, plus-value latente après taxe,
-  plus gros gains / pertes, répartition par note, cartes revendables avec bénéfice à envoyer en liste des transferts).
-- Packs : animation d'ouverture passée (option) ; choix de joueurs : la meilleure carte est encadrée (prix FUTBIN ou note).
-- Raccourcis : 1 à 6 = accueil, équipe, transferts, club, DCE, évolutions ; alerte quand une touche sert à deux actions.
-- Corrections : le menu ⋮ des listes EA s'affiche au-dessus des cartes ; l'onglet MagicBuyer du menu EA ne saute
-  plus de place en changeant d'écran.
+- Beneficio real: cada venta vista durante la sesión se contabiliza (precio de venta tras impuestos − precio pagado),
+  en el registro, el historial, el resumen al detenerse y debajo del KPI «Beneficio estimado».
+- Notificaciones: inicio, carta vendida (con el beneficio), puesta en venta fallida y resumen cada N minutos
+  (búsquedas, compras, ventas, beneficio real, saldo) además de los eventos existentes.
+- Límites de seguridad siempre activos: 2 s como mínimo entre dos búsquedas, pausa como máximo cada 50 búsquedas,
+  detención como máximo tras 12 h, 1,5 a 2,5 s entre dos compras o pujas de una misma búsqueda; inicio rechazado
+  si EA bloquea el mercado de transferibles (cuenta, solo consola, mantenimiento).
+- Filtros: exportación / importación JSON (copiar y pegar), resumen de sesión por filtro (búsquedas, compras, gastado, beneficio)
+  en la lista, preajuste **Medias DCP** (oro 85 / 86 / 87 en modo FUTBIN, rotación).
+- Modo «% del precio de FUTBIN» con un rango de medias (ej. 85–85): se sigue la lista de FUTBIN de las cartas más baratas de esas
+  medias, sin jugador ni nación. **Puja máx. en % del precio de FUTBIN** de cada carta (la puja fija sirve de tope).
+- Herramientas → Club: **Analizar el club** (valor en FUTBIN de los transferibles, monedas invertidas, plusvalía latente tras impuestos,
+  mayores ganancias / pérdidas, reparto por media, cartas revendibles con beneficio para enviar a la lista de transferibles).
+- Sobres: saltar animación de apertura (opción); elección de jugadores: la mejor carta aparece recuadrada (precio de FUTBIN o media).
+- Atajos: 1 a 6 = inicio, plantilla, traspasos, club, DCP, evoluciones; alerta cuando una tecla sirve para dos acciones.
+- Correcciones: el menú ⋮ de las listas de EA se muestra por encima de las cartas; la pestaña MagicBuyer del menú de EA ya no salta
+  de sitio al cambiar de pantalla.
 
-## Nouveautés 5.2.0
+## Novedades 5.2.0
 
-- Recherche de joueur par FUTBIN : chaque version apparaît (carte de base, cartes spéciales, autre club…),
-  avec sa version et son club quand FUTBIN les donne. Un clic choisit la version exacte : plus besoin de copier d'ID.
-  « Toutes les versions » garde toutes les cartes du joueur, chacune achetée à X % de son propre prix FUTBIN.
-- Mode « % du prix FUTBIN » pour les filtres sans joueur (nation, ligue, club, poste) : le bot lit la liste FUTBIN
-  correspondante (ou le lien de liste collé dans le filtre), la relit toutes les 3 min, et achète chaque carte à X % de SON prix.
-- Recherche intelligente : jamais de recherche large sans prix max. Les cartes suivies sont réparties en tranches de prix
-  serrées (une tranche d'une seule carte = recherche de cette version précise) : peu de résultats, donc les annonces
-  les plus récentes sont toujours en première page. Si une tranche renvoie une page pleine, les tranches sont resserrées.
-- Langue : l'interface suit la langue du compte FC (français ou anglais ; anglais pour les autres langues), réglable dans Alertes.
-- Galerie FC 27 sur l'accueil du web app : collections FUTBIN, liste prête dès l'ouverture (palier suivant, tes cartes
-  d'abord), achat des manquants ou achat + revente groupée au même prix.
-- Onglet Outils : compteur de requêtes EA (pause auto), raccourcis clavier, outils du club (CSV, envoi groupé,
-  stockage DCE → club, vente rapide), ouverture des packs possédés avec rangement automatique.
-- Cartes : score d'objet (gemme), bonnes affaires surlignées sur le marché, prix payé et bénéfice sur tes cartes ;
-  bouton « Prix min EA » dans le panneau de mise en vente.
-- DCE : solution rechargée pour les défis répétables, valeur FUTBIN de l'équipe, collections masquables,
-  rangement des récompenses après l'envoi, alerte quand EA refuse les DCE.
-- Anti-perte : aucun achat ni enchère qui ne rapporte pas après la taxe EA (revente prévue plafonnée sous le marché
-  visible), revente jamais sous le seuil de rentabilité, touche d'achat immédiat bloquée sur un achat à perte, et
-  achat immédiat comparé au prix FUTBIN sous le bouton EA.
-- Panneau ancré sur les écrans larges : le web app se décale au lieu d'être recouvert (Alertes → Interface).
-- Bouton MagicBuyer toujours juste après Accueil dans le menu EA ; touches des raccourcis plus discrètes.
-- Listes FUTBIN lues dans les vraies lignes du tableau (nom, version, club, score d'objet) ; le script Cloudflare
-  présent sur toutes les pages FUTBIN n'est plus pris pour un blocage (listes des filtres et galerie).
-- Tests automatiques : `npm test`.
+- Búsqueda de jugador por FUTBIN: aparece cada versión (carta base, cartas especiales, otro club…),
+  con su versión y su club cuando FUTBIN los facilita. Un clic elige la versión exacta: ya no hace falta copiar el ID.
+  «Todas las versiones» conserva todas las cartas del jugador, cada una comprada al X % de su propio precio de FUTBIN.
+- Modo «% del precio de FUTBIN» para los filtros sin jugador (nación, liga, club, posición): el bot lee la lista de FUTBIN
+  correspondiente (o el enlace de lista pegado en el filtro), la vuelve a leer cada 3 min y compra cada carta al X % de SU precio.
+- Búsqueda inteligente: nunca hay búsquedas amplias sin precio máximo. Las cartas en seguimiento se reparten en tramos de precios
+  ajustados (un tramo de una sola carta = búsqueda de esa versión exacta): pocos resultados, así que los anuncios
+  más recientes siempre están en la primera página. Si un tramo devuelve una página llena, los tramos se estrechan.
+- Idioma: la interfaz sigue el idioma de la cuenta de FC (francés o inglés; inglés para los demás idiomas), configurable en Alertas.
+- Galería FC 27 en el inicio de la web app: colecciones de FUTBIN, lista preparada desde la apertura (siguiente nivel, tus cartas
+  primero), compra de faltantes o compra + reventa masiva al mismo precio.
+- Pestaña Herramientas: contador de peticiones a EA (pausa auto), atajos de teclado, herramientas del club (CSV, envío masivo,
+  almacén de DCP → club, venta rápida), apertura de los sobres en posesión con ordenación automática.
+- Cartas: puntuación de artículo (gema), gangas resaltadas en el mercado, precio pagado y beneficio en tus cartas;
+  botón «Precio mín. EA» en el panel de puesta en venta.
+- DCP: solución recargada para los desafíos repetibles, valor en FUTBIN de la plantilla, colecciones ocultables,
+  ordenación de recompensas tras el envío, alerta cuando EA rechaza los DCP.
+- Antipérdidas: ninguna compra ni puja que no dé beneficio tras el impuesto de EA (reventa prevista limitada por debajo del mercado
+  visible), reventa nunca por debajo del umbral de rentabilidad, tecla de compra inmediata bloqueada en una compra con pérdidas, y
+  compra inmediata comparada con el precio de FUTBIN debajo del botón de EA.
+- Panel anclado en pantallas anchas: la web app se desplaza en lugar de quedar cubierta (Alertas → Interfaz).
+- Botón MagicBuyer siempre justo después de Inicio en el menú de EA; teclas de los atajos más discretas.
+- Listas de FUTBIN leídas en las filas reales de la tabla (nombre, versión, club, puntuación de artículo); el script de Cloudflare
+  presente en todas las páginas de FUTBIN ya no se confunde con un bloqueo (listas de filtros y galería).
+- Pruebas automáticas: `npm test`.
 
-## Nouveautés 5.1.1
+## Novedades 5.1.1
 
-- DCE : lecture des solutions FUTBIN corrigée (l'équipe est lue dans les données de la page, plus dans l'affichage) :
-  formation, poste exact de chaque joueur comme sur FUTBIN, poste bloqué du défi respecté, prix de la page repris tout de suite.
+- DCP: lectura de soluciones de FUTBIN corregida (la plantilla se lee en los datos de la página, ya no en la vista):
+  formación, posición exacta de cada jugador como en FUTBIN, posición bloqueada del desafío respetada, precio de la página tomado al instante.
 
-## Nouveautés 5.1.0
+## Novedades 5.1.0
 
-- Achat au % du prix FUTBIN par filtre, avec prix suivi en direct pendant le bot (plafond optionnel).
-- Revente et relist au % du prix FUTBIN, mise en vente groupée de la liste des transferts au prix FUTBIN.
-- Étiquette de prix FUTBIN sur toutes les cartes joueur et bouton « Remplir » dans le panneau de mise en vente d'EA.
-- DCE : import d'une solution FUTBIN (formation + joueurs du club), achat des manquants au prix FUTBIN modifiable.
-- Nouvel onglet FUTBIN (test d'accès, rafraîchissement intelligent, garde-fou sur les sauts de prix).
-- FUTWIZ retiré : FUTBIN sert de source unique. Les anciens réglages « prix de référence » sont convertis automatiquement.
+- Compra al % del precio de FUTBIN por filtro, con precio seguido en directo durante el bot (tope opcional).
+- Reventa y relistado al % del precio de FUTBIN, puesta en venta masiva de la lista de transferibles al precio de FUTBIN.
+- Etiqueta de precio de FUTBIN en todas las cartas de jugador y botón «Rellenar» en el panel de puesta en venta de EA.
+- DCP: importación de una solución de FUTBIN (formación + jugadores del club), compra de los faltantes al precio de FUTBIN modificable.
+- Nueva pestaña FUTBIN (prueba de acceso, actualización inteligente, protección contra saltos de precio).
+- FUTWIZ eliminado: FUTBIN sirve como fuente única. Los antiguos ajustes de «precio de referencia» se convierten automáticamente.
 
-## Nouveautés 5.0.0
+## Novedades 5.0.0
 
-Réécriture complète du moteur et de l'interface pour FC 27 :
+Reescritura completa del motor y de la interfaz para FC 27:
 
-- Moteur de snipe réécrit sur les vraies API du web app FC 27 (`UTSearchCriteriaDTO`, `services.Item`), sans réécriture d'URL ni hooks fragiles.
-- Corrige le blocage du bot après le premier achat, l'absence d'arrêt sur captcha, le prix FUTBIN qui remplaçait le prix max,
-  l'anti-cache désactivé sur les joueurs ciblés, les réglages jamais sauvegardés et la boucle de rendu qui chargeait le processeur.
-- Nouveau panneau latéral (le web app reste utilisable), pastille flottante, journal filtrable, export CSV, test de recherche sans achat,
-  import d'une recherche EA, rotation entre plusieurs filtres, profils de timing, enchères, notifications Discord/Telegram.
+- Motor de snipe reescrito sobre las API reales de la web app de FC 27 (`UTSearchCriteriaDTO`, `services.Item`), sin reescritura de URL ni hooks frágiles.
+- Corrige el bloqueo del bot tras la primera compra, la falta de detención ante un captcha, el precio de FUTBIN que reemplazaba el precio máximo,
+  el anticaché desactivado en los jugadores objetivo, los ajustes que nunca se guardaban y el bucle de renderizado que cargaba el procesador.
+- Nuevo panel lateral (la web app sigue siendo utilizable), botón flotante, registro filtrable, exportación CSV, prueba de búsqueda sin compra,
+  importación de una búsqueda de EA, rotación entre varios filtros, perfiles de timing, pujas, notificaciones de Discord/Telegram.
