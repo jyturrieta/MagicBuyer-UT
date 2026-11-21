@@ -31,11 +31,12 @@ const dictionary = (lang) => {
 export const LANGUAGES = [
   ["fr", "Français"],
   ["en", "English"],
+  ["es", "Español"],
 ];
 
 const AVAILABLE = new Set(LANGUAGES.map(([code]) => code));
 
-const DEFAULT_LOCALES = { fr: "fr-FR", en: "en-GB" };
+const DEFAULT_LOCALES = { fr: "fr-FR", en: "en-GB", es: "es-ES" };
 
 const readGameLocale = () => {
   try {
